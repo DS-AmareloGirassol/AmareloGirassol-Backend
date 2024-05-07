@@ -1,0 +1,37 @@
+version: '3.5'
+services:
+  unb-connect-db:
+    container_name: unb-connect-db
+    restart: always
+    image: "postgres:${POSTGRES_VERSION}"
+    ports:
+      - 5432:5432
+    env_file: .env
+    networks:
+      - unb-connect-network
+    volumes:
+      - unb-connect-pg-data:/var/lib/postgresql/data
+
+  unb-connect-api:
+    container_name: unb-connect-api
+    restart: always
+    build: .
+    env_file: .env
+    command: ["sh", "scripts/start.sh"]
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    networks:
+      - unb-connect-network
+    depends_on:
+      - unb-connect-db
+    volumes:
+      - .:/home/dev/unb-connect-api
+
+
+volumes:
+  unb-connect-pg-data: {}
+
+networks:
+  unb-connect-network:
+    name: unb-connect-network
+    driver: bridge
