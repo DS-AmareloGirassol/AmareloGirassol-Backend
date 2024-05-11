@@ -21,10 +21,12 @@ python manage.py runserver
 
 #### Subir os containers
 ```sh
-docker compose up -d
+sudo docker compose up -d
 ```
 
 #### Rodar o docker do projeto
 ```sh
-docker compose up
+sudo docker compose up
 ```
+
+Agora é ir na url http://localhost:8000/api que lá estará rodando o backend do projeto
