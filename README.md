@@ -4,7 +4,7 @@
 
 #### Visualizar mudanças nas models
 ```sh
-python3 mananage.py makemigrations
+python3 manage.py makemigrations
 ```
 
 #### Criar migrações
