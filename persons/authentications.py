@@ -4,8 +4,10 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
-from utils.user.user_type_util import UserType
 from utils.user.authentication import create_token_response, create_valid_token_response
 
 from . import serializers
@@ -19,9 +21,15 @@ class Authentication(ObtainAuthToken):
             
             user = serializer.validated_data['user']
 
-            token, _ = Token.objects.get_or_create(user=user)
+            try:
+                existing_token = Token.objects.get(user=user)
+                existing_token.delete()
+            except Token.DoesNotExist:
+                pass
+
+            token = Token.objects.create(user=user)
         except Exception as error:
-            return Response({'detail': f'Unable to log in with provided credentials111: {str(error)}'}, status.HTTP_401_UNAUTHORIZED)
+            return Response({'detail': f'Unable to log in with provided credentials: {str(error)}'}, status.HTTP_401_UNAUTHORIZED)
 
         try:
             response = Authentication._create_and_update_login_response(token.key, user.id, user.email, user.name)
@@ -50,3 +58,18 @@ class Authentication(ObtainAuthToken):
         response = create_token_response(token, user_id, user_email, user_name)
 
         return response
+    
+class Logout(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            token = Token.objects.get(user=request.user)
+            token.delete()
+
+            return Response({"detail": "Logout successful"}, status=status.HTTP_200_OK)
+        except Token.DoesNotExist:
+            return Response({"detail": "Token not found"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": f"Failed to logout: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
