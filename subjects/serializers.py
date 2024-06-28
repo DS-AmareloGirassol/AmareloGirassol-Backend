@@ -4,4 +4,4 @@ from . import models
 class SubjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Subject
-        fields = ['url', 'id', 'name', 'code']
+        fields = ['url', 'id', 'name', 'code', 'workload', 'default_semester']

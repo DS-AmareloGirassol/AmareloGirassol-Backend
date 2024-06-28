@@ -12,7 +12,18 @@ class Subject(models.Model):
         max_length = 10,
         blank = False,
         null = False,
+        unique = True,
         help_text = ('Código da Disciplina')
+    )
+
+    workload = models.IntegerField(
+        blank = False,
+        null = False
+    )
+
+    default_semester = models.IntegerField(
+        blank = False,
+        null = False
     )
 
     def __str__(self):
