@@ -32,7 +32,7 @@ class PersonViewSet(ModelViewSet):
 
         return Response({'message': 'Disciplinas cadastradas ao aluno com sucesso'}, status.HTTP_200_OK)
     
-    @action(detail=True, methods=['get'], url_path='subject')
+    @action(detail=True, methods=['get'], url_path='subjects')
     def subjects(self, request: Request, pk=None):
         user: Person = self.get_object()
 
