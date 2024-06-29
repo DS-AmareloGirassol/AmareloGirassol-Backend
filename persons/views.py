@@ -19,6 +19,17 @@ class PersonViewSet(ModelViewSet):
             return [AllowAny()]
         return super().get_permissions()
     
+    @action(detail=True, methods=['get'], url_path='fluxo')
+    def fluxo(self, request: Request, pk=None):
+        user: Person = self.get_object()
+
+        try:
+            fluxo_response = user.get_fluxo_infos()
+        except Exception as e:
+            return Response({'errors': e.args}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response('', status.HTTP_200_OK)
+    
     @action(detail=True, methods=['post'], url_path='add-subject')
     def add_subjects(self, request: Request, pk=None):
         user: Person = self.get_object()

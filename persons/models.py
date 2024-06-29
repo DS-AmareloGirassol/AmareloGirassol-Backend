@@ -11,15 +11,33 @@ class Person(AbstractUser):
     objects = PersonManager()
     
     name = models.CharField(
-        max_length=100
+        max_length = 100
+    )
+
+    semester_being_attended = models.IntegerField(
+        blank = False,
+        null = False,
+        default = 1
     )
 
     email = models.EmailField(
-        unique=True,
-        null=False
+        unique = True,
+        null = False
     )
 
     subjects = models.ManyToManyField(Subject, blank=True)
+
+    @property
+    def expected_fluxo_position(self):
+        subjects = Subject.objects.filter(default_semester__lte = self.semester_being_attended)
+
+        return Person.calculate_fluxo_position(subjects)
+
+    @property
+    def current_fluxo_position(self):
+        subjects = self.subjects
+
+        return Person.calculate_fluxo_position(subjects)
 
     username = None
     USERNAME_FIELD = 'email'
@@ -42,3 +60,15 @@ class Person(AbstractUser):
         
     def get_all_subjects(self):
         return self.subjects.all()
+    
+    @classmethod
+    def calculate_fluxo_position(cls, subjects):
+        if subjects:
+            total_workload = subjects.aggregate(total=models.Sum('workload'))['total']
+
+            if total_workload is not None:
+                current_position = total_workload * 100 / Subject.get_total_workload()
+
+                return current_position
+
+        return 0

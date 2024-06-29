@@ -7,7 +7,7 @@ from .models import Person
 class PersonSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Person
-        fields = ['id', 'url', 'name', 'password', 'email']
+        fields = ['id', 'url', 'name', 'password', 'email', 'semester_being_attended', 'current_fluxo_position', 'expected_fluxo_position']
         extra_kwargs = {'password': {'write_only': True, 'required': True}}
 
 class AuthenticationGetTokenParamsSerializer(Serializer):

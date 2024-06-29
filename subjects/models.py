@@ -28,3 +28,12 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+    @classmethod
+    def get_total_workload(cls):
+        subjects = Subject.objects.all()
+
+        total_workload = subjects.aggregate(total=models.Sum('workload'))['total']
+
+        return total_workload if total_workload else 0
