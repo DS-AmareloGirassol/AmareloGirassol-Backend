@@ -23,11 +23,10 @@ class Authentication(ObtainAuthToken):
 
             try:
                 existing_token = Token.objects.get(user=user)
-                existing_token.delete()
             except Token.DoesNotExist:
                 pass
 
-            token = Token.objects.create(user=user)
+            token = existing_token if existing_token else Token.objects.create(user=user)
         except Exception as error:
             return Response({'detail': f'Unable to log in with provided credentials: {str(error)}'}, status.HTTP_401_UNAUTHORIZED)
 
