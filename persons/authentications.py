@@ -21,12 +21,13 @@ class Authentication(ObtainAuthToken):
             
             user = serializer.validated_data['user']
 
+            token = None
             try:
-                existing_token = Token.objects.get(user=user)
+                token = Token.objects.get(user=user)
             except Token.DoesNotExist:
                 pass
 
-            token = existing_token if existing_token else Token.objects.create(user=user)
+            token = token if token else Token.objects.create(user=user)
         except Exception as error:
             return Response({'detail': f'Unable to log in with provided credentials: {str(error)}'}, status.HTTP_401_UNAUTHORIZED)
 
