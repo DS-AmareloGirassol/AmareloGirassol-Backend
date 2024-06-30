@@ -29,7 +29,7 @@ class Person(AbstractUser):
 
     @property
     def expected_fluxo_position(self):
-        subjects = Subject.objects.filter(default_semester__lte = self.semester_being_attended)
+        subjects = Subject.objects.filter(default_semester__lte = (self.semester_being_attended - 1))
 
         return Person.calculate_fluxo_position(subjects)
 
