@@ -8,31 +8,31 @@ class Feedback(models.Model):
     metodologia = models.IntegerField(
         blank = False,
         null = False,
-        default = 1
+        default = 3
     )
 
-    didatica = models.IntegerField(
+    trabalho = models.IntegerField(
         blank = False,
         null = False,
-        default = 1
+        default = 3
     )
 
-    suporte_professor = models.IntegerField(
+    provas = models.IntegerField(
         blank = False,
         null = False,
-        default = 1
+        default = 3
     )
 
-    monitoria = models.IntegerField(
+    material = models.IntegerField(
         blank = False,
         null = False,
-        default = 1
+        default = 3
     )
 
-    indice_recomendacao = models.IntegerField(
+    facilidade = models.IntegerField(
         blank = False,
         null = False,
-        default = 1
+        default = 3
     )
 
     user = models.ForeignKey(

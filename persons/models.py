@@ -15,7 +15,9 @@ class Person(AbstractUser):
     )
 
     description = models.CharField(
-        max_length = 200
+        max_length = 200,
+        blank = True,
+        null = True,
     )
 
     semester_being_attended = models.IntegerField(
